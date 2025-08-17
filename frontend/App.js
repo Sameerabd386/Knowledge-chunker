@@ -110,7 +110,14 @@ function App() {
       <div className="w-full max-w-3xl">
         <header className="text-center mb-10">
           <h1 className="text-4xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-600">Knowledge Chunker</h1>
-          <p className="text-gray-400 mt-4 max-w-xl mx-auto">Upload a document, then ask questions to find the most relevant information instantly.</p>
+          <p className="text-gray-400 mt-4 max-w-xl mx-auto">
+            This tool transforms your documents into a searchable knowledge base. 
+            Upload a PDF or TXT file, and then ask questions to find the most relevant information instantly.
+          </p>
+          {/* --- YOUR NAME IS HERE --- */}
+          <p className="text-gray-500 mt-4 text-sm">
+            Created by Mohammad Sameer
+          </p>
         </header>
         <div className="bg-gray-800/50 p-6 rounded-xl border border-gray-700 mb-8 shadow-lg">
           <h2 className="text-2xl font-semibold mb-4 text-gray-200">1. Upload Document</h2>
