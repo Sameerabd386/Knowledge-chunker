@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 
 # Local import (ensure knowledge_base.py is in backend/)
-from .knowledge_base import KnowledgeBase  
+from knowledge_base import KnowledgeBase  
 
 # --- Cache Fix for Hugging Face Spaces / Codespaces ---
 os.environ["HF_HOME"] = "/tmp/huggingface"
