@@ -1,3 +1,12 @@
+
+---
+title: Knowledge Chunker
+emoji: 🤖
+colorFrom: purple
+colorTo: indigo
+sdk: docker
+---
+
 <div align="center">
 <h1>
 <font color="#8B5CF6">🤖 Knowledge Chunker & Semantic Search API</font>
