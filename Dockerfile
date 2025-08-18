@@ -7,12 +7,15 @@ WORKDIR /app
 # Add the current directory to Python's path
 ENV PYTHONPATH="${PYTHONPATH}:/app"
 
+# Set the NLTK_DATA environment variable to a local path
+ENV NLTK_DATA /app/nltk_data
+
 # Copy the backend requirements file and install dependencies
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Download the NLTK 'punkt' model during the build process
-RUN python -c "import nltk; nltk.download('punkt')"
+# Download the NLTK 'punkt' model to the specified path during the build
+RUN python -c "import nltk; nltk.download('punkt', download_dir='/app/nltk_data')"
 
 # Copy the rest of the application code into the container
 COPY . .

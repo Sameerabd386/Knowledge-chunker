@@ -5,13 +5,8 @@ import PyPDF2
 from sentence_transformers import SentenceTransformer
 import nltk
 
-# Download the sentence tokenizer model if not already present
-try:
-    nltk.data.find('tokenizers/punkt')
-except LookupError:
-    print("Downloading NLTK's 'punkt' model...")
-    # This line must be 'punkt', not 'punkt_tab'
-    nltk.download('punkt')
+# The download logic has been removed from here and moved to the Dockerfile.
+# The application now assumes the 'punkt' model is available.
 
 class KnowledgeBase:
     def __init__(self):
