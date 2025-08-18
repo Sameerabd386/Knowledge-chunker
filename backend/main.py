@@ -4,7 +4,7 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
-from knowledge_base import KnowledgeBase
+from .knowledge_base import KnowledgeBase # <-- THIS LINE IS CHANGED
 from pydantic import BaseModel
 from dotenv import load_dotenv
 
