@@ -5,8 +5,11 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Add the current directory to Python's path
-# This helps the server find your 'backend' module
 ENV PYTHONPATH="${PYTHONPATH}:/app"
+
+# Create a directory for NLTK data and set the environment variable
+RUN mkdir -p /app/nltk_data
+ENV NLTK_DATA /app/nltk_data
 
 # Copy the backend requirements file and install dependencies
 COPY backend/requirements.txt .
