@@ -4,9 +4,11 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
-from .knowledge_base import KnowledgeBase  # <-- Correct import
 from pydantic import BaseModel
 from dotenv import load_dotenv
+
+# Local import (ensure knowledge_base.py is in backend/)
+from .knowledge_base import KnowledgeBase  
 
 # --- Cache Fix for Hugging Face Spaces / Codespaces ---
 os.environ["HF_HOME"] = "/tmp/huggingface"
@@ -78,8 +80,14 @@ async def search(q: str):
         raise HTTPException(500, f"Search error: {e}")
 
 # --- Serve Frontend ---
-app.mount("/static", StaticFiles(directory="../frontend"), name="static")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FRONTEND_DIR = os.path.join(BASE_DIR, "../frontend")
+
+app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 
 @app.get("/")
 async def read_root():
-    return FileResponse('../frontend/index.html')
+    index_path = os.path.join(FRONTEND_DIR, "index.html")
+    if not os.path.exists(index_path):
+        raise HTTPException(status_code=404, detail="Frontend not found. Make sure index.html exists in /frontend")
+    return FileResponse(index_path)
