@@ -4,9 +4,14 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
-from .knowledge_base import KnowledgeBase # <-- THIS LINE IS CHANGED
+from .knowledge_base import KnowledgeBase  # <-- Correct import
 from pydantic import BaseModel
 from dotenv import load_dotenv
+
+# --- Cache Fix for Hugging Face Spaces / Codespaces ---
+os.environ["HF_HOME"] = "/tmp/huggingface"
+os.environ["TRANSFORMERS_CACHE"] = "/tmp/huggingface/transformers"
+os.environ["SENTENCE_TRANSFORMERS_HOME"] = "/tmp/huggingface/sentence_transformers"
 
 # Load environment variables from .env file
 load_dotenv()
@@ -43,16 +48,14 @@ async def gemini_proxy(request: GeminiRequest):
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(api_url, json=payload, timeout=30.0)
-            response.raise_for_status() # Raises an exception for 4XX or 5XX status codes
-            result = response.json()
-            return result
+            response.raise_for_status()  # Raises an exception for 4XX or 5XX status codes
+            return response.json()
     except httpx.HTTPStatusError as e:
         raise HTTPException(status_code=e.response.status_code, detail=f"Gemini API error: {e.response.text}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An internal error occurred: {str(e)}")
 
-
-# --- Existing Endpoints (Unchanged) ---
+# --- Existing Endpoints ---
 @app.post("/upload/")
 async def upload_document(file: UploadFile = File(...)):
     if not (file.filename.endswith(".pdf") or file.filename.endswith(".txt")):
@@ -67,13 +70,14 @@ async def upload_document(file: UploadFile = File(...)):
 
 @app.get("/search/")
 async def search(q: str):
-    if not q: raise HTTPException(400, "Query 'q' cannot be empty.")
+    if not q:
+        raise HTTPException(400, "Query 'q' cannot be empty.")
     try:
         return {"query": q, "results": kb.search(query=q, k=3)}
     except Exception as e:
         raise HTTPException(500, f"Search error: {e}")
 
-# --- Serve Frontend (Unchanged) ---
+# --- Serve Frontend ---
 app.mount("/static", StaticFiles(directory="../frontend"), name="static")
 
 @app.get("/")

@@ -4,14 +4,18 @@ import numpy as np
 import PyPDF2
 from sentence_transformers import SentenceTransformer
 import nltk
+import os
 
-# The download logic has been removed from here and moved to the Dockerfile.
-# The application now assumes the 'punkt' model is available.
+# 👇 Fix cache permission issues on Hugging Face Spaces / Codespaces
+os.environ["HF_HOME"] = "/tmp/huggingface"
+os.environ["TRANSFORMERS_CACHE"] = "/tmp/huggingface/transformers"
+os.environ["SENTENCE_TRANSFORMERS_HOME"] = "/tmp/huggingface/sentence_transformers"
 
 class KnowledgeBase:
     def __init__(self):
         """Initializes the KnowledgeBase with a sentence transformer model."""
-        self.model = SentenceTransformer('all-MiniLM-L6-v2')
+        # 👇 Use the correct repo ID
+        self.model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
         self.index = None
         self.chunks = []
 
@@ -39,7 +43,6 @@ class KnowledgeBase:
                 chunks.append(paragraph)
         
         return [chunk for chunk in chunks if chunk]
-
 
     def build_index(self, file_bytes: bytes, file_type: str):
         """Builds the FAISS index from a file."""

@@ -21,7 +21,7 @@ RUN python -c "import nltk; nltk.download('punkt', download_dir='/app/nltk_data'
 COPY . .
 
 # Expose the port the app runs on
-EXPOSE 7860
+EXPOSE 8000
 
 # Define the command to run your app
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "7860"]
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
